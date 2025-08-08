@@ -1,0 +1,84 @@
+<div class="container-fluid px-4 mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Dashboard</h2>
+        <button class="btn btn-primary" (click)="addTransaction()">
+            <i class="bi bi-plus-lg"></i> Add Transaction
+        </button>
+    </div>
+    <div class="row g-4 mb-4">
+        <div class="col-md-4">
+            <div class="card h-100 text-white bg-opacity-75"
+                [ngClass]="totalIncome() > 0 ? 'bg-success' : 'bg-secondary'">
+                <div class="card-body">
+                    <h5 class="card-title">Total Income</h5>
+                    <!-- Read the computed signal's value with () -->
+                    <h3 class="card-text">{{ totalIncome() | currency:'INR':'symbol-narrow':'1.0-0' }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 text-white bg-opacity-75"
+                [ngClass]="totalExpenses() > 0 ? 'bg-danger' : 'bg-secondary'">
+                <div class="card-body">
+                    <h5 class="card-title">Total Expenses</h5>
+                    <h3 class="card-text fw-bold">{{ totalExpenses() | currency:'INR':'symbol-narrow':'1.0-0' }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card h-100 text-white bg-opacity-75" [ngClass]="netBalance() >= 0 ? 'bg-primary' : 'bg-danger'">
+                <div class="card-body">
+                    <h5 class="card-title">Net Balance</h5>
+                    <h3 class="card-text">{{ netBalance() | currency:'INR':'symbol-narrow':'1.0-0' }}</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h3 class="mt-4">Transactions</h3>
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th style="width: 30%;">Date</th>
+                    <th style="width: 15%;">Type</th>
+                    <th style="width: 15%;">Category</th>
+                    <th style="width: 15%;">Amount</th>
+                    <th style="width: 10%;">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Read the transactions signal with () -->
+                <tr *ngFor="let transaction of transactions()">
+                    <td>{{ transaction.createdDate | date: 'dd/MM/yy hh:mm a' }}</td>
+                    <td>
+                        <span class="badge"
+                            [ngClass]="transaction.type === 'Income' ? 'bg-success-subtle text-success-emphasis' : 'bg-danger-subtle text-danger-emphasis'">
+                            {{ transaction.type }}
+                        </span>
+                    </td>
+                    <td>{{ transaction.category }}</td>
+                    <td [ngClass]="transaction.type === 'Income' ? 'text-success' : 'text-danger'">
+                        {{ transaction.amount | currency:'INR':'symbol-narrow':'1.0-0' }}
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary me-2" (click)="editTransaction(transaction.id)"
+                            title="Edit">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" (click)="deleteTransaction(transaction.id)"
+                            title="Delete">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <!-- Check the length of the signal's value -->
+        <div *ngIf="transactions().length === 0" class="text-center mt-3">
+            <p>No transactions found. Click "Add Transaction" to get started.</p>
+        </div>
+    </div>
+</div>

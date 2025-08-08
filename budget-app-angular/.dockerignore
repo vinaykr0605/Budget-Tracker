@@ -1,0 +1,23 @@
+# This file tells Docker which files and folders to ignore when building the image.
+# It helps to speed up the build process and keep the image size small.
+
+# Ignore Git files
+.git
+.gitignore
+
+# Ignore editor and OS-specific files
+.editorconfig
+.vscode/
+README.md
+
+# Ignore Node.js dependencies - these will be installed inside the container
+node_modules/
+
+# Ignore Angular cache and build output folders
+# The 'dist' folder will be generated inside the container during the build stage.
+.angular/
+dist/
+npm-debug.log
+
+# Ignore test reports and coverage
+coverage/
